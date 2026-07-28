@@ -9,7 +9,8 @@ INIT="IN;SP4;"
 SQUARE="IN;SP4;PA90,90;PD;PA90,900;PA900,900;PA900,90;PA90,90;PU;SP0;"
 
 init_tty() {
-    stty -f $DEV 9600 cs8 -cstopb -parenb
+    # stty -f $DEV 9600 cs8 -cstopb -parenb
+     stty -f $DEV 9600 raw -echo clocal
 }
 
 detect_status() {
@@ -27,18 +28,23 @@ detect_status() {
 }
 
 square() {
-    echo "Prepare TTY"
-
-    echo "Open FD"
+    echo -n "Opening FD for read and write..."
     exec 3<>$DEV
+    echo "done."
 
-    echo "Write"
-    echo -n "$INIT" >&3
+    echo -n  "Configuring TTY..."
+    stty raw 9600 \
+        cs8 -parenb -cstopb clocal \
+        -crtscts -echo -ixon -ixoff min 1 time 0 <&3
+    echo "done."
 
-    echo "Close"
+    echo -n "Writing..."
+    echo -n "IN;SP4;SP0;" >&3
+    echo "done."
+
+    echo -n "Closing..."
     exec 3>&-
-
-    echo "Done"
+    echo "done."
 }
 
-detect_status
+square
