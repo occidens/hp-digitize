@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Digitize</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <h1>Digitize</h1>
+    <form id="plot-form">
+      <input type="text" id="code" name="code" size="60"
+             placeholder="PA90,90;PD;PA90,900;PA900,900;PA900,90;PA90,90;">
+      <button type="submit">Send</button>
+    </form>
+    <pre id="result"></pre>
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+  </body>
+</html>
